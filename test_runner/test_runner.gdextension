@@ -1,0 +1,16 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.2
+reloadable=true
+
+[libraries]
+linux.debug.x86_64 = "res://../tests/target/debug/libtests.so"
+linux.release.x86_64 = "res://../tests/target/release/libtests.so"
+windows.debug.x86_64 = "res://../tests/target/debug/tests.dll"
+windows.release.x86_64 = "res://../tests/target/release/tests.dll"
+macos.debug = "res://../tests/target/debug/libtests.dylib"
+macos.release = "res://../tests/target/release/libtests.dylib"
+macos.debug.arm64 = "res://../tests/target/debug/libtests.dylib"
+macos.release.arm64 = "res://../tests/target/release/libtests.dylib"
+web.debug.wasm32 = "res://../tests/target/wasm32-unknown-emscripten/debug/tests.wasm"
+web.release.wasm32 = "res://../tests/target/wasm32-unknown-emscripten/release/tests.wasm"

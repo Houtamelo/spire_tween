@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=3 uid="uid://xrehs4k2yx5y"]
+
+[sub_resource type="Gradient" id="1"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="2"]
+gradient = SubResource("1")
+
+[node name="test_scene" type="Tester"]
+
+[node name="camera_2d" type="Camera2D" parent="."]
+zoom = Vector2(0.5, 0.5)
+
+[node name="sprite" type="Sprite2D" parent="."]
+modulate = Color(0, 1, 1, 1)
+texture = SubResource("2")
+
+[node name="test_buttons" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1788.0
+offset_top = -1063.0
+offset_right = -1788.0
+offset_bottom = -1063.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(4, 4)
+
+[node name="std" type="Button" parent="test_buttons"]
+layout_mode = 0
+offset_left = -27.0
+offset_top = 8.0
+offset_right = 5.0
+offset_bottom = 28.0
+text = "std"
+
+[node name="relative" type="Button" parent="test_buttons"]
+layout_mode = 0
+offset_left = -27.0
+offset_top = 39.25
+offset_right = 33.0
+offset_bottom = 59.25
+text = "relative"
+
+[node name="speed_based" type="Button" parent="test_buttons"]
+layout_mode = 0
+offset_left = -27.0
+offset_top = 69.25
+offset_right = 68.0
+offset_bottom = 89.25
+text = "speed_based"
+
+[node name="delay" type="Button" parent="test_buttons"]
+layout_mode = 0
+offset_left = -27.0
+offset_top = 99.0
+offset_right = 19.0
+offset_bottom = 119.0
+text = "delay"
