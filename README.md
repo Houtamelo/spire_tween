@@ -180,6 +180,7 @@ Add `spire_tween` to your project's dependencies:
 run `cargo add spire_tween`
 or
 add following line to your Cargo.toml:
+[dependencies]
 `spire_tween = "0.1"`
 
 You'll most likely going to want to use the latest version, as it will contain the latest bug-fixes.
