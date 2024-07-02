@@ -4,6 +4,7 @@ pub mod handle_impl;
 
 use crate::internal::*;
 
+#[must_use]
 pub struct SpireTween<T> {
 	pub bound_node: Option<Gd<Node>>,
 	pub delay: f64,
@@ -15,5 +16,5 @@ pub struct SpireTween<T> {
 	pub loop_mode: LoopMode,
 	pub calls_on_finish: Vec<DelayedCall>,
 	pub t: T,
-	pub(crate) state: State,
+	pub(crate) state: TweenState,
 }

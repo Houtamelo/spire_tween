@@ -49,8 +49,8 @@ delegate_impls! {
 	}
 	
 	pub trait SpireTweener {
-		fn state(self: &Self,) -> State;
-		fn set_state(self: &mut Self, state: State) -> ();
+		fn state(self: &Self,) -> TweenState;
+		fn set_state(self: &mut Self, state: TweenState) -> ();
 	}
 }
 

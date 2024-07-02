@@ -9,8 +9,8 @@ impl SpireTween<DelayedCall> {
 		Self {
 			bound_node: None,
 			state: match auto_play.0 {
-				true => State::Playing,
-				false => State::Paused,
+				true => TweenState::Playing,
+				false => TweenState::Paused,
 			},
 			delay,
 			speed_scale: 1.,

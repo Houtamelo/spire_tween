@@ -10,7 +10,7 @@ impl SpireTween<Sequence> {
 	pub fn new() -> Self {
 		Self {
 			bound_node: None,
-			state: State::Playing,
+			state: TweenState::Playing,
 			delay: 0.,
 			speed_scale: 1.,
 			elapsed_time: 0.,
@@ -31,11 +31,11 @@ impl SpireTween<Sequence> {
 		let mut tween = tween.into();
 
 		match self.state {
-			| State::Playing
-			| State::Paused => {
+			| TweenState::Playing
+			| TweenState::Paused => {
 				tween.pause();
 			}
-			State::Stopped => {
+			TweenState::Stopped => {
 				tween.stop();
 			}
 		}
@@ -58,11 +58,11 @@ impl SpireTween<Sequence> {
 		let mut tween = tween.into();
 
 		match self.state {
-			| State::Playing
-			| State::Paused => {
+			| TweenState::Playing
+			| TweenState::Paused => {
 				tween.pause();
 			}
-			State::Stopped => {
+			TweenState::Stopped => {
 				tween.stop();
 			}
 		}
@@ -88,11 +88,11 @@ impl SpireTween<Sequence> {
 		let mut tween = tween.into();
 
 		match self.state {
-			| State::Playing
-			| State::Paused => {
+			| TweenState::Playing
+			| TweenState::Paused => {
 				tween.pause();
 			}
-			State::Stopped => {
+			TweenState::Stopped => {
 				tween.stop();
 			}
 		}

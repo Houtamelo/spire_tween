@@ -1,16 +1,16 @@
 use crate::internal::*;
 
 pub trait SpireTweener {
-	fn state(&self) -> State;
-	fn set_state(&mut self, state: State);
+	fn state(&self) -> TweenState;
+	fn set_state(&mut self, state: TweenState);
 
-	fn play(&mut self) { self.set_state(State::Playing); }
-	fn pause(&mut self) { self.set_state(State::Paused); }
-	fn stop(&mut self) { self.set_state(State::Stopped); }
+	fn play(&mut self) { self.set_state(TweenState::Playing); }
+	fn pause(&mut self) { self.set_state(TweenState::Paused); }
+	fn stop(&mut self) { self.set_state(TweenState::Stopped); }
 
-	fn is_playing(&self) -> bool { self.state() == State::Playing }
-	fn is_paused(&self) -> bool { self.state() == State::Paused }
-	fn is_stopped(&self) -> bool { self.state() == State::Stopped }
+	fn is_playing(&self) -> bool { self.state() == TweenState::Playing }
+	fn is_paused(&self) -> bool { self.state() == TweenState::Paused }
+	fn is_stopped(&self) -> bool { self.state() == TweenState::Stopped }
 }
 
 pub(crate) trait TweenerStep: SpireTweener {

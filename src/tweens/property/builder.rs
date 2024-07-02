@@ -204,8 +204,8 @@ impl<TVal> SpireTween<Property<TVal>>
 		Self {
 			bound_node: None,
 			state: match auto_play.0 {
-				true => State::Playing,
-				false => State::Paused,
+				true => TweenState::Playing,
+				false => TweenState::Paused,
 			},
 			delay: 0.,
 			speed_scale: 1.,
@@ -258,8 +258,8 @@ impl SpireTween<Property<Variant>> {
 		Self {
 			bound_node: None,
 			state: match auto_play.0 {
-				true => State::Playing,
-				false => State::Paused,
+				true => TweenState::Playing,
+				false => TweenState::Paused,
 			},
 			delay: 0.,
 			speed_scale: 1.,

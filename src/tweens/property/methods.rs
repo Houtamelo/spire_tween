@@ -1,15 +1,15 @@
 use crate::internal::*;
 
 impl<TVal: TweenableValue> SpireTweener for SpireTween<Property<TVal>> {
-	fn state(&self) -> State { self.state }
-	fn set_state(&mut self, state: State) {
+	fn state(&self) -> TweenState { self.state }
+	fn set_state(&mut self, state: TweenState) {
 		match state {
-			State::Stopped => {
+			TweenState::Stopped => {
 				self.elapsed_time = 0.0;
 				self.cycle_count = 0;
 			}
-			| State::Playing
-			| State::Paused => {}
+			| TweenState::Playing
+			| TweenState::Paused => {}
 		}
 
 		self.state = state;
@@ -190,8 +190,8 @@ impl<TVal> TweenerStep for SpireTween<Property<TVal>>
 {
 	fn complete(mut self) {
 		match self.state {
-			| State::Playing
-			| State::Paused => {
+			| TweenState::Playing
+			| TweenState::Paused => {
 				match self.try_seek_end() {
 					Ok(_) => {}
 					Err(err) => { godot_error!("{err}"); }
@@ -199,7 +199,7 @@ impl<TVal> TweenerStep for SpireTween<Property<TVal>>
 
 				self.handle_finished();
 			}
-			State::Stopped => {}
+			TweenState::Stopped => {}
 		}
 	}
 
@@ -248,7 +248,7 @@ impl<TVal> TweenerStep for SpireTween<Property<TVal>>
 
 #[allow(private_bounds)]
 impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
-	fn try_seek_end(&mut self) -> Result<()> {
+	fn try_seek_end(&mut self) -> anyhow::Result<()> {
 		if !self.t.target.is_instance_valid() {
 			let property = &self.t.property;
 			bail!("Can not set property `{property}` on Object, target instance is not valid.");

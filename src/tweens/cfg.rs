@@ -2,7 +2,7 @@
 pub struct AutoPlay(pub bool);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum State {
+pub enum TweenState {
 	Playing,
 	Paused,
 	Stopped,

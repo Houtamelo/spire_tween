@@ -7,5 +7,5 @@ edition = "2021"
 crate-type = ["lib", "cdylib"]
 
 [dependencies]
-spire_tweener = { path = "../" }
+spire_tween = { path = "../" }
 godot = "0.1"

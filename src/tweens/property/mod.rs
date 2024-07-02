@@ -30,7 +30,7 @@ pub(crate) enum PropertyEnum {
 pub(crate) fn eval_property<TVal: FromGodot, TObj: GodotClass + Inherits<Object>>(
 	gd: Gd<TObj>,
 	property: NodePath,
-) -> Result<TVal> {
+) -> anyhow::Result<TVal> {
 	let obj = gd.upcast();
 	
 	let variant = obj.get_indexed(property.clone());
@@ -70,8 +70,8 @@ delegate_impls! {
 	}
 	
 	pub trait SpireTweener {
-		fn state(self: &Self,) -> State;
-		fn set_state(self: &mut Self, state: State) -> ();
+		fn state(self: &Self,) -> TweenState;
+		fn set_state(self: &mut Self, state: TweenState) -> ();
 	}
 }
 

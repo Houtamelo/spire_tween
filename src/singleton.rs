@@ -74,8 +74,8 @@ impl TweensController {
 			    }
 
 			    match tween.state() {
-				    | State::Playing | State::Paused => true,
-				    State::Stopped => false,
+				    | TweenState::Playing | TweenState::Paused => true,
+				    TweenState::Stopped => false,
 			    }
 		    });
 	}
@@ -86,8 +86,8 @@ impl TweensController {
 			    tween.tick_physics(delta_time);
 
 			    match tween.state() {
-				    | State::Playing | State::Paused => true,
-				    State::Stopped => false,
+				    | TweenState::Playing | TweenState::Paused => true,
+				    TweenState::Stopped => false,
 			    }
 		    });
 	}

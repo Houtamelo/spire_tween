@@ -1,9 +1,9 @@
 use crate::internal::*;
 
 impl SpireTweener for SpireTween<DelayedCall> {
-	fn state(&self) -> State { self.state }
+	fn state(&self) -> TweenState { self.state }
 
-	fn set_state(&mut self, state: State) {
+	fn set_state(&mut self, state: TweenState) {
 		self.state = state;
 	}
 }
@@ -11,11 +11,11 @@ impl SpireTweener for SpireTween<DelayedCall> {
 impl TweenerStep for SpireTween<DelayedCall> {
 	fn complete(mut self) {
 		match self.state {
-			| State::Playing
-			| State::Paused => {
+			| TweenState::Playing
+			| TweenState::Paused => {
 				self.seek_end();
 			}
-			State::Stopped => {}
+			TweenState::Stopped => {}
 		}
 	}
 	

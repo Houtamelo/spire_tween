@@ -1,26 +1,26 @@
 use crate::internal::*;
 
 impl SpireTweener for SpireTween<Sequence> {
-	fn state(&self) -> State { self.state }
+	fn state(&self) -> TweenState { self.state }
 
-	fn set_state(&mut self, state: State) {
+	fn set_state(&mut self, state: TweenState) {
 		match state {
-			State::Playing => self.private_play(),
-			State::Paused => self.private_pause(),
-			State::Stopped => self.private_stop(),
+			TweenState::Playing => self.private_play(),
+			TweenState::Paused => self.private_pause(),
+			TweenState::Stopped => self.private_stop(),
 		}
 	}
 }
 
 impl SpireTween<Sequence> {
 	fn private_play(&mut self) {
-		if self.state == State::Playing {
+		if self.state == TweenState::Playing {
 			return;
 		}
 
-		let from_begin = self.state == State::Stopped;
+		let from_begin = self.state == TweenState::Stopped;
 
-		self.state = State::Playing;
+		self.state = TweenState::Playing;
 
 		self.t.queue
 		    .iter_mut()
@@ -56,15 +56,15 @@ impl SpireTween<Sequence> {
 	}
 
 	fn private_pause(&mut self) {
-		self.state = State::Paused;
+		self.state = TweenState::Paused;
 	}
 
 	fn private_stop(&mut self) {
-		if self.state == State::Stopped {
+		if self.state == TweenState::Stopped {
 			return;
 		}
 
-		self.state = State::Stopped;
+		self.state = TweenState::Stopped;
 		self.elapsed_time = 0.0;
 
 		self.t.queue
@@ -108,17 +108,17 @@ impl TweenerStep for SpireTween<Sequence> {
 
 		for (at, tween) in self.t.inserteds.iter_mut() {
 			match tween.state() {
-				State::Playing => {
+				TweenState::Playing => {
 					tween.advance_time(delta_time);
 				}
-				State::Paused => {
+				TweenState::Paused => {
 					if *at <= total_after_delay {
 						let above_at = total_after_delay - *at;
 						tween.play();
 						tween.advance_time(above_at);
 					}
 				}
-				State::Stopped => {}
+				TweenState::Stopped => {}
 			}
 		}
 
@@ -134,14 +134,14 @@ impl TweenerStep for SpireTween<Sequence> {
 					    match fork_element {
 						    ForkElement::Tween(tween) => {
 							    match tween.state() {
-								    State::Playing => {
+								    TweenState::Playing => {
 									    tween.advance_time(remaining_delta)
 								    }
-								    State::Paused => {
+								    TweenState::Paused => {
 									    tween.play();
 									    tween.advance_time(remaining_delta)
 								    }
-								    State::Stopped => Some(remaining_delta),
+								    TweenState::Stopped => Some(remaining_delta),
 							    }
 						    }
 						    ForkElement::Interval { total_time, elapsed_time } => {

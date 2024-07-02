@@ -1,9 +1,9 @@
 use crate::internal::*;
 
 impl<TVal: TweenableValue> SpireTweener for SpireTween<Method<TVal>> {
-	fn state(&self) -> State { self.state }
+	fn state(&self) -> TweenState { self.state }
 
-	fn set_state(&mut self, state: State) {
+	fn set_state(&mut self, state: TweenState) {
 		self.state = state;
 	}
 }
@@ -14,11 +14,11 @@ impl<TVal: TweenableValue> TweenerStep for SpireTween<Method<TVal>>
 {
 	fn complete(mut self) {
 		match self.state {
-			| State::Playing
-			| State::Paused => {
+			| TweenState::Playing
+			| TweenState::Paused => {
 				self.seek_end();
 			}
-			State::Stopped => {}
+			TweenState::Stopped => {}
 		}
 	}
 

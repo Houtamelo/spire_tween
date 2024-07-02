@@ -95,11 +95,11 @@ impl<T> SpireHandle<T>
 		T: ValidTween,
 		SpireTween<T>: Tick,
 {
-	pub fn state(&mut self) -> Result<State, FetchError> {
+	pub fn state(&mut self) -> Result<TweenState, FetchError> {
 		self.map(|tween| tween.state())
 	}
 
-	pub fn set_state(&mut self, state: State) -> Result<(), FetchError> {
+	pub fn set_state(&mut self, state: TweenState) -> Result<(), FetchError> {
 		self.map(|tween| tween.set_state(state))
 	}
 
