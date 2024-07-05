@@ -31,9 +31,9 @@ impl_do_property! {
 }
 
 impl_do_property! {
-	pub trait DoLabelPercentVisible where Self: Label {
-		#["percent_visible"]
-		fn do_percent_visible(f64);
+	pub trait DoLabelVisibleRatio where Self: Label {
+		#["do_visible_ratio"]
+		fn do_visible_ratio(f64);
 	}
 }
 
