@@ -3,15 +3,21 @@ macro_rules! impl_do_property {
 	    #[$property: literal]
 	    fn $fn_name: ident($val_ty: ty);
     }) => {
-	    pub trait $trait_ty {
+	    pub trait $trait_ty <Marker = ()> {
 			fn $fn_name(&self, end_val: $val_ty, duration: f64) -> SpireTween<Property<$val_ty>>;
 		}
 		
-		impl<TClass: GodotClass + Inherits<$sub_ty> + Inherits<Object>> $trait_ty for Gd<TClass> {
+		impl<TClass: Inherits<$sub_ty> + Inherits<Object>> $trait_ty<()> for Gd<TClass> {
 			fn $fn_name(&self, end_val: $val_ty, duration: f64) -> SpireTween<Property<$val_ty>> {
 				self.do_property($property, end_val, duration)
 			}
 		}
+	    
+	    impl<T: WithBaseField + Inherits<Object>> $trait_ty<BaseMarker> for T {
+		    fn $fn_name(&self, end_val: $val_ty, duration: f64) -> SpireTween<Property<$val_ty>> {
+				self.do_property($property, end_val, duration)
+			}
+	    }
     };
 }
 

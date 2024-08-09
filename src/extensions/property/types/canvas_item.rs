@@ -48,52 +48,47 @@ impl_do_property! {
 #[allow(unused)]
 #[cfg(test)]
 mod tests {
+	use godot::prelude::*;
+	use godot::classes::*;
 	use super::*;
 
-	fn test(node_direct: &Sprite, node_ref: Gd<CanvasItem>, node_tref: TGd<Particles2D>) -> Result<()> {
-		node_direct.do_color_r( 1., 5.)?;
-		node_ref.do_color_r(1., 5.)?;
-		node_tref.do_color_r(1., 5.)?;
+	fn test(node_direct: &Gd<Sprite2D>, node_ref: Gd<CanvasItem>, node_tref: Gd<CpuParticles2D>) {
+		node_direct.do_color_r( 1., 5.);
+		node_ref.do_color_r(1., 5.);
+		node_tref.do_color_r(1., 5.);
 
-		node_direct.do_color_g(1., 5.)?;
-		node_ref.do_color_g(1., 5.)?;
-		node_tref.do_color_g(1., 5.)?;
+		node_direct.do_color_g(1., 5.);
+		node_ref.do_color_g(1., 5.);
+		node_tref.do_color_g(1., 5.);
 
-		node_direct.do_color_b(1., 5.)?;
-		node_ref.do_color_b(1., 5.)?;
-		node_tref.do_color_b(1., 5.)?;
+		node_direct.do_color_b(1., 5.);
+		node_ref.do_color_b(1., 5.);
+		node_tref.do_color_b(1., 5.);
 
-		node_direct.do_color_a( 1., 5.)?;
-		node_ref.do_color_a(1., 5.)?;
-		node_tref.do_color_a(1., 5.)?;
+		node_direct.do_color_a( 1., 5.);
+		node_ref.do_color_a(1., 5.);
+		node_tref.do_color_a(1., 5.);
 
-		node_direct.do_fade(1., 5.)?;
-		node_ref.do_fade(1., 5.)?;
-		node_tref.do_fade(1., 5.)?;
+		node_direct.do_fade(1., 5.);
+		node_ref.do_fade(1., 5.);
+		node_tref.do_fade(1., 5.);
 
 		let color = Color::from_rgb(1., 1., 1.);
-		node_direct.do_color(color, 5.)?;
-		node_ref.do_color(color, 5.)?;
-		node_tref.do_color(color, 5.)?;
-		
-		Ok(())
+		node_direct.do_color(color, 5.);
+		node_ref.do_color(color, 5.);
+		node_tref.do_color(color, 5.);
 	}
 
-	#[derive(NativeClass)]
-	#[inherit(Node2D)]
-	struct Test {}
+	#[derive(GodotClass)]
+	#[class(init, base = Node2D)]
+	struct Test {
+		base: Base<Node2D>,
+	}
 
-	#[methods]
-	impl Test {
-		fn new(_owner: &Node2D) -> Self {
-			_owner.do_color_r(1., 2.0);
-
-			Self {}
-		}
-
-		#[func]
-		fn _ready(&self, #[base] owner: &Node2D) {
-			owner.do_color_r(1., 2.0);
+	#[godot_api]
+	impl INode2D for Test {
+		fn ready(&mut self) {
+			self.do_color_r(1., 2.0);
 		}
 	}
 }

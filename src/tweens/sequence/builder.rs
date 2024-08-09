@@ -43,8 +43,18 @@ impl SpireTween<Sequence> {
 		self.t.queue.push(vec![tween.into()]);
 	}
 
-	pub fn append_call(&mut self, f: impl Into<DelayedCall>) {
+	pub fn append_call(&mut self, f: impl FnMut() + 'static) {
 		let tween = SpireTween::<DelayedCall>::new(f, 0.0, AutoPlay(true));
+		self.t.queue.push(vec![tween.into()]);
+	}
+
+	pub fn append_callable(&mut self, callable: Callable) {
+		let tween = SpireTween::<DelayedCall>::new_callable(
+			callable,
+			0.0,
+			AutoPlay(true),
+		);
+		
 		self.t.queue.push(vec![tween.into()]);
 	}
 
@@ -74,12 +84,26 @@ impl SpireTween<Sequence> {
 		}
 	}
 
-	pub fn join_call(&mut self, f: impl Into<DelayedCall>) {
+	pub fn join_call(&mut self, f: impl FnMut() + 'static) {
 		if let Some(back) = self.t.queue.last_mut() {
 			let tween = SpireTween::<DelayedCall>::new(f, 0.0, AutoPlay(true));
 			back.push(tween.into());
 		} else {
 			self.append_call(f);
+		}
+	}
+
+	pub fn join_callable(&mut self, callable: Callable) {
+		if let Some(back) = self.t.queue.last_mut() {
+			let tween = SpireTween::<DelayedCall>::new_callable(
+				callable, 
+				0.0,
+				AutoPlay(true),
+			);
+			
+			back.push(tween.into());
+		} else {
+			self.append_callable(callable);
 		}
 	}
 
@@ -100,8 +124,18 @@ impl SpireTween<Sequence> {
 		self.t.inserteds.push((time, tween));
 	}
 
-	pub fn insert_call(&mut self, time: f64, f: impl Into<DelayedCall>) {
+	pub fn insert_call(&mut self, time: f64, f: impl FnMut() + 'static) {
 		let tween = SpireTween::<DelayedCall>::new(f, 0.0, AutoPlay(true));
+		self.t.inserteds.push((time, tween.into()));
+	}
+	
+	pub fn insert_callable(&mut self, time: f64, callable: Callable) {
+		let tween = SpireTween::<DelayedCall>::new_callable(
+			callable, 
+			0.0,
+			AutoPlay(true),
+		);
+		
 		self.t.inserteds.push((time, tween.into()));
 	}
 }

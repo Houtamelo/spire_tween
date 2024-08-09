@@ -48,11 +48,12 @@ impl_do_property! {
 #[allow(unused)]
 #[cfg(test)]
 mod tests {
-	use gdnative::api::Particles2D;
+	use godot::classes::*;
+	use godot::prelude::*;
 
 	use super::*;
 
-	fn please_compile(node_direct: &Sprite, node_ref: Gd<CanvasItem>, node_tref: TGd<Particles2D>) {
+	fn please_compile(node_direct: Gd<Sprite2D>, node_ref: &Gd<CanvasItem>, node_tref: Gd<CpuParticles2D>) {
 		node_direct.do_self_color_r(1., 5.0);
 		node_ref.do_self_color_r(1., 5.0);
 		node_tref.do_self_color_r(1., 5.0);

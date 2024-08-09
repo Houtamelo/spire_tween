@@ -1,6 +1,7 @@
+use godot::obj::WithBaseField;
 use crate::internal::*;
 
-pub trait DoMethod<TVal> {
+pub trait DoMethod<TVal, Marker = ()> {
 	type Return;
 
 	fn do_method(
@@ -12,9 +13,9 @@ pub trait DoMethod<TVal> {
 	) -> SpireTween<Method<Self::Return>>;
 }
 
-impl<T, TVal> DoMethod<TVal> for Gd<T>
+impl<T, TVal> DoMethod<TVal, ()> for Gd<T>
 	where
-		T: GodotClass + Inherits<Object>,
+		T: Inherits<Object>,
 		TVal: TweenableValue + SpireLerp,
 		Method<TVal>: ValidTween,
 {
@@ -29,12 +30,38 @@ impl<T, TVal> DoMethod<TVal> for Gd<T>
 	) -> SpireTween<Method<TVal>> {
 		SpireTween::<Method<TVal>>::new(
 			method.into(),
-			self.clone(),
+			self,
 			start_val,
 			end_val,
 			duration,
 			AutoPlay(true),
-		).maybe_bound(self.clone())
+		).maybe_bound(self)
+	}
+}
+
+impl<T, TVal> DoMethod<TVal, BaseMarker> for T
+	where
+		T: WithBaseField + Inherits<Object>,
+		TVal: TweenableValue + SpireLerp,
+		Method<TVal>: ValidTween,
+{
+	type Return = TVal;
+
+	fn do_method(
+		&self,
+		method: impl Into<StringName>,
+		start_val: TVal,
+		end_val: TVal,
+		duration: f64,
+	) -> SpireTween<Method<TVal>> {
+		SpireTween::<Method<TVal>>::new(
+			method.into(),
+			&self.to_gd(),
+			start_val,
+			end_val,
+			duration,
+			AutoPlay(true),
+		).maybe_bound(&self.to_gd())
 	}
 }
 
@@ -50,7 +77,7 @@ pub trait DoVarMethod<TVal: ToGodot> {
 
 impl<T, TVal> DoVarMethod<TVal> for Gd<T>
 	where
-		T: GodotClass + Inherits<Object>,
+		T: Inherits<Object>,
 		TVal: Sized + Clone + ToGodot + FromGodot + SpireLerp,
 {
 	fn do_var_method(
@@ -69,12 +96,12 @@ impl<T, TVal> DoVarMethod<TVal> for Gd<T>
 
 		SpireTween::<Method<Variant>>::new::<TVal>(
 			method.into(),
-			self.clone(),
+			self,
 			start_val,
 			end_val,
 			duration,
 			AutoPlay(true),
 			lerp_fn,
-		).maybe_bound(self.clone())
+		).maybe_bound(self)
 	}
 }

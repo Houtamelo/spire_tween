@@ -4,7 +4,7 @@ pub trait CompleteBoundTweens {
 	fn complete_bound_tweens(&mut self);
 }
 
-impl<T: GodotClass + Inherits<Node>> CompleteBoundTweens for Gd<T> {
+impl<T: Inherits<Node>> CompleteBoundTweens for Gd<T> {
 	fn complete_bound_tweens(&mut self) {
 		let node = self.clone().upcast();
 		TweensController::map_mut(|brain| {
@@ -17,7 +17,7 @@ pub trait KillBoundTweens {
 	fn kill_bound_tweens(&mut self);
 }
 
-impl<T: GodotClass + Inherits<Node>> KillBoundTweens for Gd<T> {
+impl<T: Inherits<Node>> KillBoundTweens for Gd<T> {
 	fn kill_bound_tweens(&mut self) {
 		let node = self.clone().upcast();
 		TweensController::map_mut(|brain| {

@@ -39,7 +39,7 @@ impl<TVal> SpireTween<Method<TVal>>
 {
 	pub fn new(
 		method: impl Into<StringName>,
-		target: Gd<impl Inherits<Object>>,
+		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
 		start: TVal,
 		end: TVal,
 		duration: f64,
@@ -60,7 +60,7 @@ impl<TVal> SpireTween<Method<TVal>>
 			loop_mode: LoopMode::Finite(0),
 			t: Method {
 				method: method.into(),
-				target: target.upcast(),
+				target: target.to_godot().upcast(),
 				duration,
 				ease: Ease::Linear,
 				start,
@@ -73,7 +73,7 @@ impl<TVal> SpireTween<Method<TVal>>
 
 	pub fn new_registered(
 		method: impl Into<StringName>,
-		target: Gd<impl Inherits<Object>>,
+		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
 		start: TVal,
 		end: TVal,
 		duration: f64,
@@ -88,7 +88,7 @@ impl<TVal> SpireTween<Method<TVal>>
 impl SpireTween<Method<Variant>> {
 	pub fn new<TVal: SpireLerp>(
 		method: impl Into<StringName>,
-		target: Gd<impl Inherits<Object>>,
+		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
 		start: TVal,
 		end: TVal,
 		duration: f64,
@@ -110,7 +110,7 @@ impl SpireTween<Method<Variant>> {
 			loop_mode: LoopMode::Finite(0),
 			t: Method {
 				method: method.into(),
-				target: target.upcast(),
+				target: target.to_godot().upcast(),
 				duration,
 				ease: Ease::Linear,
 				start: start.to_variant(),
@@ -123,7 +123,7 @@ impl SpireTween<Method<Variant>> {
 
 	pub fn new_registered<TVal: SpireLerp>(
 		method: impl Into<StringName>,
-		target: Gd<impl Inherits<Object>>,
+		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
 		start: TVal,
 		end: TVal,
 		duration: f64,

@@ -280,7 +280,7 @@ impl Test {
 				sprite.do_color_r(0.5, D_2)
 				      .register();
 
-				let mut seq = SpireTween::<Sequence>::new().bound_to(sprite.clone());
+				let mut seq = SpireTween::<Sequence>::new().bound_to(sprite);
 				seq.append(sprite.do_move_x(1000.0, D_1));
 				seq.join(sprite.do_move_y(-1000.0, D_1));
 				seq.append(sprite.do_move_x(-500.0, D_1));
@@ -292,7 +292,7 @@ impl Test {
 				      .as_speed_based(0.05)
 				      .register();
 
-				let mut seq = SpireTween::<Sequence>::new().bound_to(sprite.clone());
+				let mut seq = SpireTween::<Sequence>::new().bound_to(sprite);
 				seq.append(sprite.do_move_x(1000.0, D_1).as_speed_based(100.));
 				seq.join(sprite.do_move_y(-1000.0, D_1).as_speed_based(100.));
 				seq.append(sprite.do_move(Vector2::new(-800., 400.), D_1).as_speed_based(200.));
@@ -303,7 +303,7 @@ impl Test {
 				sprite.do_color_r(1., D_2)
 				      .register();
 
-				let mut seq = SpireTween::<Sequence>::new().bound_to(sprite.clone());
+				let mut seq = SpireTween::<Sequence>::new().bound_to(sprite);
 				seq.append(sprite.do_move_x(1000.0, D_1));
 				seq.join(sprite.do_move_y(-1000.0, D_1).as_relative(0.));
 				seq.append(sprite.do_move_x(-500.0, D_1).as_relative(0.));
@@ -315,7 +315,7 @@ impl Test {
 				      .with_delay(0.5)
 				      .register();
 
-				let mut seq = SpireTween::<Sequence>::new().bound_to(sprite.clone()).with_delay(3.0);
+				let mut seq = SpireTween::<Sequence>::new().bound_to(sprite).with_delay(3.0);
 				seq.append(sprite.do_move_x(1000.0, D_1));
 				seq.join(sprite.do_move_y(-1000.0, D_1));
 				seq.append(sprite.do_move_x(-500.0, D_1).with_delay(5.0));

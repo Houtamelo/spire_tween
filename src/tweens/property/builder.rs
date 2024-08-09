@@ -196,7 +196,7 @@ impl<TVal> SpireTween<Property<TVal>>
 {
 	pub fn new(
 		property: impl Into<NodePath>,
-		target: Gd<impl Inherits<Object>>,
+		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
 		auto_play: AutoPlay,
@@ -217,7 +217,7 @@ impl<TVal> SpireTween<Property<TVal>>
 			calls_on_finish: Vec::new(),
 			t: Property {
 				property: property.into(),
-				target: target.upcast(),
+				target: target.to_godot().upcast(),
 				lerp_mode: LerpMode::Absolute { duration, start: None },
 				ease: Ease::Linear,
 				end,
@@ -231,14 +231,13 @@ impl<TVal> SpireTween<Property<TVal>>
 
 	pub fn new_registered(
 		property: impl Into<NodePath>,
-		target: Gd<impl Inherits<Object>>,
+		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
 		auto_play: AutoPlay,
 	) -> SpireHandle<Property<TVal>> {
-		Self::new(
-			property, target, end, duration, auto_play,
-		).register()
+		Self::new(property, target, end, duration, auto_play)
+			.register()
 	}
 }
 
@@ -246,7 +245,7 @@ impl<TVal> SpireTween<Property<TVal>>
 impl SpireTween<Property<Variant>> {
 	pub fn new<TVal: SpireLerp>(
 		property: impl Into<NodePath>,
-		target: Gd<impl Inherits<Object>>,
+		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
 		auto_play: AutoPlay,
@@ -271,7 +270,7 @@ impl SpireTween<Property<Variant>> {
 			calls_on_finish: Vec::new(),
 			t: Property {
 				property: property.into(),
-				target: target.upcast(),
+				target: target.to_godot().upcast(),
 				lerp_mode: LerpMode::Absolute { duration, start: None },
 				ease: Ease::Linear,
 				end: end.to_variant(),
@@ -285,7 +284,7 @@ impl SpireTween<Property<Variant>> {
 
 	pub fn new_registered<TVal: SpireLerp>(
 		property: impl Into<NodePath>,
-		target: Gd<impl Inherits<Object>>,
+		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
 		auto_play: AutoPlay,

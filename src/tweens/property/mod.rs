@@ -27,7 +27,7 @@ pub(crate) enum PropertyEnum {
 	Variant(Box<SpireTween<Property<Variant>>>),
 }
 
-pub(crate) fn eval_property<TVal: FromGodot, TObj: GodotClass + Inherits<Object>>(
+pub(crate) fn eval_property<TVal: FromGodot, TObj: Inherits<Object>>(
 	gd: Gd<TObj>,
 	property: NodePath,
 ) -> anyhow::Result<TVal> {

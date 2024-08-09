@@ -5,11 +5,11 @@ pub mod builder;
 
 pub enum DelayedCall {
 	Callable(Callable),
-	Closure(Box<dyn Fn()>),
+	Closure(Box<dyn FnMut()>),
 }
 
 impl DelayedCall {
-	pub(crate) fn invoke(&self) {
+	pub(crate) fn invoke(&mut self) {
 		match self {
 			DelayedCall::Callable(callable) => {
 				callable.callv(VariantArray::new());
@@ -21,7 +21,7 @@ impl DelayedCall {
 	}
 }
 
-impl<T: Fn() + 'static> From<T> for DelayedCall {
+impl<T: FnMut() + 'static> From<T> for DelayedCall {
 	fn from(value: T) -> Self {
 		Self::Closure(Box::new(value))
 	}

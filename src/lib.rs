@@ -3,6 +3,7 @@
 #![feature(hash_extract_if)]
 #![feature(let_chains)]
 #![feature(is_none_or)]
+
 #![allow(non_camel_case_types)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::manual_try_fold)]
@@ -13,10 +14,13 @@ mod tweens;
 mod extensions;
 
 pub mod prelude {
+	#[doc(hidden)]
+	pub struct BaseMarker;
+	
 	pub use crate::ease::Ease;
 	pub use crate::extensions::{
 		bound_tweens::{CompleteBoundTweens, KillBoundTweens},
-		do_delayed_call::DoDelayedCall,
+		do_delayed_call::{DoDelayedCall, DoDelayedCallable},
 		do_method::{DoMethod, DoVarMethod},
 		property::{
 			DoProperty,
@@ -44,6 +48,9 @@ pub mod prelude {
 
 #[allow(unused_imports)]
 pub(crate) mod internal {
+	pub(crate) use crate::prelude::BaseMarker;
+	pub(crate) use godot::obj::WithBaseField;
+	
 	pub(crate) use std::any::type_name;
 	pub(crate) use std::collections::HashMap;
 	pub(crate) use std::fmt::Debug;

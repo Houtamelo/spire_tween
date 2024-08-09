@@ -74,7 +74,11 @@ impl<T: ValidTween> SpireHandle<T> {
 		self.map(|tween| tween.loop_mode = loop_mode)
 	}
 	
-	pub fn on_finish(&mut self, f: impl Into<DelayedCall>) -> Result<(), FetchError> {
+	pub fn on_finish(&mut self, f: impl FnMut() + 'static) -> Result<(), FetchError> {
 		self.map(|tween| tween.calls_on_finish.push(f.into()))
+	}
+	
+	pub fn on_finish_callable(&mut self, callable: Callable) -> Result<(), FetchError> {
+		self.map(|tween| tween.calls_on_finish.push(callable.into()))
 	}
 }

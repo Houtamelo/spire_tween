@@ -16,7 +16,7 @@ impl<T> SpireTween<T>
 		self.stop();
 
 		self.calls_on_finish
-		    .iter()
+		    .iter_mut()
 		    .for_each(DelayedCall::invoke);
 	}
 }
