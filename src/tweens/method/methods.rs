@@ -23,6 +23,11 @@ impl<TVal: TweenableValue> TweenerStep for SpireTween<Method<TVal>>
 	}
 
 	fn advance_time(&mut self, delta_time: f64) -> Option<f64> {
+		if !self.t.target.is_instance_valid() {
+			self.stop();
+			return None;
+		}
+		
 		self.elapsed_time += delta_time * self.speed_scale;
 
 		if self.elapsed_time < self.delay {
@@ -46,7 +51,11 @@ impl<TVal: TweenableValue> TweenerStep for SpireTween<Method<TVal>>
 		let maybe_excess_time = {
 			let total_duration = self.delay + self.t.duration;
 			let excess = self.elapsed_time - total_duration;
-			(excess > 0.).then_some(excess)
+			if excess > 0. {
+				Some(excess)
+			} else {
+				None
+			}
 		};
 
 		self.t.target.call(self.t.method.clone(), &[target_value.to_variant()]);

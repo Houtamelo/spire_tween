@@ -28,10 +28,14 @@ pub(crate) enum PropertyEnum {
 }
 
 pub(crate) fn eval_property<TVal: FromGodot, TObj: Inherits<Object>>(
-	gd: Gd<TObj>,
-	property: NodePath,
+	gd: &Gd<TObj>,
+	property: &NodePath,
 ) -> anyhow::Result<TVal> {
-	let obj = gd.upcast();
+	if !gd.is_instance_valid() {
+		return Err(anyhow!("Cannot evaluate property, object does not point to a valid instance."));
+	}
+	
+	let obj = gd.upcast_ref();
 	
 	let variant = obj.get_indexed(property.clone());
 
@@ -39,10 +43,8 @@ pub(crate) fn eval_property<TVal: FromGodot, TObj: Inherits<Object>>(
 		.try_to::<TVal>()
 		.map_err(|err| {
 			let type_name = type_name::<TVal>();
-			anyhow!(
-				"Target property `{property}` is not of type `{type_name}`, got: `{variant:?}`. \n\
-				 Error: {err}"
-			)
+			anyhow!("Target property `{property}` is not of type `{type_name}`, got: `{variant:?}`. \n\
+				     Error: {err}")
 		})
 }
 

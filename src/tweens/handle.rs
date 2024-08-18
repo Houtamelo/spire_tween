@@ -26,21 +26,17 @@ impl<T> SpireHandle<T>
 		f: impl FnOnce(&mut SpireTween<T>) -> TMap,
 	) -> Result<TMap, FetchError> {
 		TweensController::map_mut(|brain| {
-			let any_tween =
-				brain.tweens
-				     .get_mut(&self.id)
-				     .ok_or(FetchError::NotFound)?;
+			let any_tween = brain.tweens.get_mut(&self.id).ok_or(FetchError::NotFound)?;
 
 			let found_type = any_tween.inner_type_name();
 
-			let tween =
-				T::ref_from_any(any_tween)
-					.ok_or_else(|| {
-						FetchError::TypeMismatch {
-							expected: type_name::<T>(),
-							found: found_type,
-						}
-					})?;
+			let tween = T::ref_from_any(any_tween)
+				.ok_or_else(|| {
+					FetchError::TypeMismatch {
+						expected: type_name::<T>(),
+						found: found_type,
+					}
+				})?;
 
 			Ok(f(tween))
 		})
@@ -66,23 +62,20 @@ impl<T> SpireHandle<T>
 
 	pub fn claim(self) -> Result<SpireTween<T>, FetchError> {
 		TweensController::map_mut(|brain| {
-			let any_tween =
-				brain.tweens
-				     .remove(&self.id)
-				     .ok_or(FetchError::NotFound)?;
+			let any_tween = brain.tweens.remove(&self.id)
+			                     .ok_or(FetchError::NotFound)?;
 
 			let found_type = any_tween.inner_type_name();
 
-			let tween =
-				T::from_any(any_tween)
-					.map_err(|mismatched_tween| {
-						brain.tweens.insert(self.id, mismatched_tween);
+			let tween = T::from_any(any_tween)
+				.map_err(|mismatched_tween| {
+					brain.tweens.insert(self.id, mismatched_tween);
 
-						FetchError::TypeMismatch {
-							expected: type_name::<T>(),
-							found: found_type,
-						}
-					})?;
+					FetchError::TypeMismatch {
+						expected: type_name::<T>(),
+						found: found_type,
+					}
+				})?;
 
 			Ok(tween)
 		})
@@ -126,18 +119,4 @@ impl<T> SpireHandle<T>
 	pub fn stop(&mut self) -> Result<(), FetchError> {
 		self.map(|tween| { tween.stop(); })
 	}
-
-	/*
-	pub fn do_absolute_step(&self, delta: f64) -> Result<()> {
-		self.map_mut(|tween| { tween.do_absolute_step(delta) })
-	}
-
-	pub fn do_scaled_step(&self, delta: f64) -> Result<()> {
-		self.map_mut(|tween| { tween.do_scaled_step(delta) })
-	}
-
-	pub fn seek(&self, time: f64) -> Result<()> {
-		self.map_mut(|tween| { tween.seek(time) })
-	}
-	*/
 }

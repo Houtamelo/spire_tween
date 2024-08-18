@@ -4,14 +4,27 @@ use crate::tweens::handle::FetchError;
 #[allow(private_bounds)]
 impl<T: ValidTween> SpireHandle<T> {
 	pub fn bound_node(&mut self) -> Result<Option<Gd<Node>>, FetchError> {
-		self.map(|tween| tween.bound_node.clone())
+		self.map(|tween| {
+			if let Some(node) = &tween.bound_node && node.is_instance_valid() {
+				Some(node.clone())
+			} else {
+				None
+			}
+		})
 	}
 	
 	pub fn set_bound_node(
 		&mut self,
 		node: Gd<impl Inherits<Node>>,
 	) -> Result<(), FetchError> {
-		self.map(|tween| tween.bound_node = Some(node.clone().upcast()))
+		self.map(|tween| {
+			tween.bound_node =
+				if node.is_instance_valid() {
+					Some(node.upcast())
+				} else {
+					None
+				};
+		})
 	}
 	
 	pub fn clear_bound_node(&mut self) -> Result<(), FetchError> {

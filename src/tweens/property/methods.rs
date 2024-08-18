@@ -19,24 +19,15 @@ impl<TVal: TweenableValue> SpireTweener for SpireTween<Property<TVal>> {
 #[allow(private_bounds)]
 impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 	pub fn is_absolute(&self) -> bool {
-		matches!(
-			self.t.lerp_mode,
-			LerpMode::Absolute { .. }
-		)
+		matches!(self.t.lerp_mode, LerpMode::Absolute { .. })
 	}
 
 	pub fn is_relative(&self) -> bool {
-		matches!(
-			self.t.lerp_mode,
-			LerpMode::Relative { .. }
-		)
+		matches!(self.t.lerp_mode, LerpMode::Relative { .. })
 	}
 
 	pub fn is_speed_based(&self) -> bool {
-		matches!(
-			self.t.lerp_mode,
-			LerpMode::SpeedBased { .. }
-		)
+		matches!(self.t.lerp_mode, LerpMode::SpeedBased { .. })
 	}
 }
 
@@ -48,8 +39,8 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 				let start_val = match &start {
 					Some(val) => val,
 					None => {
-						let val_at_obj = 
-							match eval_property(self.t.target.clone(), self.t.property.clone()) {
+						let val_at_obj =
+							match eval_property(&self.t.target, &self.t.property) {
 								Ok(val) => val,
 								Err(err) => {
 									godot_error!("{err}");
@@ -69,9 +60,7 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 						self.elapsed_time,
 					);
 
-					let eased_ratio =
-						self.t.ease
-						    .sample(elapsed_ratio.min(1.));
+					let eased_ratio = self.t.ease.sample(elapsed_ratio.min(1.));
 
 					(self.t.lerp_fn)(
 						start_val,
@@ -83,22 +72,26 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 				let excess_time = {
 					let total_duration = self.delay + *duration;
 					let excess = self.elapsed_time - total_duration;
-					(excess > 0.).then_some(excess)
+					if excess > 0. {
+						Some(excess)
+					} else {
+						None
+					}
 				};
 
 				Some((target_value, excess_time))
 			}
 			LerpMode::SpeedBased { speed, t_sum } => {
 				let (target_value, step_result) = {
-					let val_at_obj = 
-						match eval_property(self.t.target.clone(), self.t.property.clone()) {
+					let val_at_obj =
+						match eval_property(&self.t.target, &self.t.property) {
 							Ok(val) => val,
 							Err(err) => {
 								godot_error!("{err}");
 								return None;
 							}
 						};
-					
+
 					(self.t.step_fn)(
 						&val_at_obj,
 						&self.t.end,
@@ -124,7 +117,7 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 			LerpMode::Relative { duration, origin } => {
 				let target_value = {
 					let val_at_obj =
-						match eval_property(self.t.target.clone(), self.t.property.clone()) {
+						match eval_property(&self.t.target, &self.t.property) {
 							Ok(val) => val,
 							Err(err) => {
 								godot_error!("{err}");
@@ -174,7 +167,12 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 				let excess_time = {
 					let total_duration = self.delay + *duration;
 					let excess = self.elapsed_time - total_duration;
-					(excess > 0.).then_some(excess)
+
+					if excess > 0. {
+						Some(excess)
+					} else {
+						None
+					}
 				};
 
 				Some((target_value, excess_time))
@@ -186,7 +184,7 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 impl<TVal> TweenerStep for SpireTween<Property<TVal>>
 	where
 		TVal: TweenableValue,
-		Property<TVal>: ValidTween, 
+		Property<TVal>: ValidTween,
 {
 	fn complete(mut self) {
 		match self.state {
@@ -204,45 +202,40 @@ impl<TVal> TweenerStep for SpireTween<Property<TVal>>
 	}
 
 	fn advance_time(&mut self, delta_time: f64) -> Option<f64> {
+		if !self.t.target.is_instance_valid() {
+			self.stop();
+			return None;
+		}
+
 		self.elapsed_time += delta_time * self.speed_scale;
 
 		if self.elapsed_time < self.delay {
 			return None;
 		}
 
-		if !self.t.target.is_instance_valid() {
-			self.stop();
-			return None;
-		}
+		let (target_value, maybe_excess_time) = self.do_step(delta_time)?;
 
-		let (target_value, maybe_excess_time) =
-			self.do_step(delta_time)?;
+		self.t.target.set_indexed(self.t.property.clone(), target_value.to_variant());
 
-		self.t.target.set_indexed(
-			self.t.property.clone(),
-			target_value.to_variant(),
-		);
+		maybe_excess_time.and_then(|excess_time| {
+			self.cycle_count += 1;
 
-		maybe_excess_time
-			.and_then(|excess_time| {
-				self.cycle_count += 1;
-
-				match &mut self.loop_mode {
-					LoopMode::Infinite => {
+			match &mut self.loop_mode {
+				LoopMode::Infinite => {
+					self.elapsed_time = self.delay + excess_time;
+					None
+				}
+				LoopMode::Finite(loop_count) => {
+					if self.cycle_count < *loop_count {
 						self.elapsed_time = self.delay + excess_time;
 						None
-					}
-					LoopMode::Finite(loop_count) => {
-						if self.cycle_count < *loop_count {
-							self.elapsed_time = self.delay + excess_time;
-							None
-						} else {
-							self.elapsed_time -= excess_time;
-							Some(excess_time)
-						}
+					} else {
+						self.elapsed_time -= excess_time;
+						Some(excess_time)
 					}
 				}
-			}).inspect(|_| self.handle_finished())
+			}
+		}).inspect(|_| self.handle_finished())
 	}
 }
 
@@ -251,7 +244,7 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 	fn try_seek_end(&mut self) -> anyhow::Result<()> {
 		if !self.t.target.is_instance_valid() {
 			let property = &self.t.property;
-			bail!("Can not set property `{property}` on Object, target instance is not valid.");
+			bail!("Cannot set property `{property}` on Object, target does not point to a valid instance.");
 		}
 
 		let target_value =
@@ -261,10 +254,7 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 					self.t.end.clone()
 				}
 				LerpMode::Relative { duration, origin } => {
-					let val_at_obj = eval_property(
-						self.t.target.clone(),
-						self.t.property.clone(),
-					)?;
+					let val_at_obj = eval_property(&self.t.target, &self.t.property)?;
 
 					let previous_relative = {
 						let previous_eased_ratio = {

@@ -118,21 +118,3 @@ impl AnyTween {
 		}
 	} 
 }
-
-/*
-pub trait Tick: Sized {
-
-fn seek(&mut self, time: f64);
-
-fn do_absolute_step(&mut self, delta: f64) {
-	let current = self.elapsed_time();
-	self.seek(current + delta);
-}
-
-fn do_scaled_step(&mut self, delta: f64) {
-	let current = self.elapsed_time();
-	self.seek(current + delta * self.speed_scale());
-}
-
-}
-*/

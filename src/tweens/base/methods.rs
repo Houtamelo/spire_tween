@@ -8,16 +8,12 @@ impl<T> SpireTween<T>
 		T: ValidTween,
 {
 	pub(crate) fn is_bounded_dead(&self) -> bool {
-		self.bound_node.clone()
-		    .is_some_and(|node| !node.is_instance_valid())
+		self.bound_node.as_ref().is_some_and(|node| !node.is_instance_valid())
 	}
 
 	pub(crate) fn handle_finished(&mut self) {
 		self.stop();
-
-		self.calls_on_finish
-		    .iter_mut()
-		    .for_each(DelayedCall::invoke);
+		self.calls_on_finish.iter_mut().for_each(DelayedCall::invoke);
 	}
 }
 
@@ -35,9 +31,8 @@ impl<T: ValidTween> Tick for SpireTween<T>
 			return;
 		}
 
-		let is_bounded_processing =
-			self.bound_node.clone()
-			    .is_some_and(|node| node.is_processing());
+		// is_bounded_dead above already checks if the instance is valid
+		let is_bounded_processing = self.bound_node.as_ref().is_some_and(|node| node.is_processing());
 
 		if self.pause_mode == TweenPauseMode::BOUND
 			&& !is_bounded_processing {
@@ -57,9 +52,8 @@ impl<T: ValidTween> Tick for SpireTween<T>
 			return;
 		}
 
-		let is_bounded_processing =
-			self.bound_node.clone()
-			    .is_some_and(|node| node.is_physics_processing());
+		// is_bounded_dead above already checks if the instance is valid
+		let is_bounded_processing = self.bound_node.as_ref().is_some_and(|node| node.is_physics_processing());
 
 		if self.pause_mode == TweenPauseMode::BOUND
 			&& !is_bounded_processing {

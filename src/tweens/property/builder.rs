@@ -101,11 +101,8 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 	{
 		match self.t.lerp_mode {
 			LerpMode::SpeedBased { speed, .. } => {
-				let eval_result = eval_property(
-					self.t.target.clone(),
-					self.t.property.clone(),
-				);
-
+				let eval_result = eval_property(&self.t.target, &self.t.property);
+				
 				let val_at_obj =
 					match eval_result {
 						Ok(val) => val,

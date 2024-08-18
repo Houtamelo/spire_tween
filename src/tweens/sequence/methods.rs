@@ -22,8 +22,7 @@ impl SpireTween<Sequence> {
 
 		self.state = TweenState::Playing;
 
-		self.t.queue
-		    .iter_mut()
+		self.t.queue.iter_mut()
 		    .flat_map(|vec| vec.iter_mut())
 		    .for_each(|fork_element| {
 			    match fork_element {
@@ -43,8 +42,7 @@ impl SpireTween<Sequence> {
 			    }
 		    });
 
-		self.t.inserteds
-		    .iter_mut()
+		self.t.inserteds.iter_mut()
 		    .for_each(|(_, tween)| {
 			    if from_begin {
 				    tween.stop();
@@ -67,8 +65,7 @@ impl SpireTween<Sequence> {
 		self.state = TweenState::Stopped;
 		self.elapsed_time = 0.0;
 
-		self.t.queue
-		    .iter_mut()
+		self.t.queue.iter_mut()
 		    .flat_map(|vec| vec.iter_mut())
 		    .for_each(|fork_element| {
 			    match fork_element {
@@ -81,9 +78,7 @@ impl SpireTween<Sequence> {
 			    }
 		    });
 
-		self.t.inserteds
-		    .iter_mut()
-		    .for_each(|(_, tween)| tween.stop());
+		self.t.inserteds.iter_mut().for_each(|(_, tween)| tween.stop());
 	}
 }
 
@@ -128,45 +123,53 @@ impl TweenerStep for SpireTween<Sequence> {
 		while let Some(fork) = queue_iter.next()
 			&& remaining_delta > 0.
 		{
-			remaining_delta =
-				fork.iter_mut()
-				    .map(|fork_element| {
-					    match fork_element {
-						    ForkElement::Tween(tween) => {
-							    match tween.state() {
-								    TweenState::Playing => {
-									    tween.advance_time(remaining_delta)
-								    }
-								    TweenState::Paused => {
-									    tween.play();
-									    tween.advance_time(remaining_delta)
-								    }
-								    TweenState::Stopped => Some(remaining_delta),
-							    }
-						    }
-						    ForkElement::Interval { total_time, elapsed_time } => {
-							    *elapsed_time += remaining_delta;
+			remaining_delta = fork
+				.iter_mut()
+				.map(|fork_element| {
+					match fork_element {
+						ForkElement::Tween(tween) => {
+							match tween.state() {
+								TweenState::Playing => {
+									tween.advance_time(remaining_delta)
+								}
+								TweenState::Paused => {
+									tween.play();
+									tween.advance_time(remaining_delta)
+								}
+								TweenState::Stopped => Some(remaining_delta),
+							}
+						}
+						ForkElement::Interval { total_time, elapsed_time } => {
+							*elapsed_time += remaining_delta;
 
-							    let above_total = *elapsed_time - *total_time;
-							    (above_total > 0.).then_some(above_total)
-						    }
-					    }
-				    })
-					.fold(Some(remaining_delta), |cur_min, time| {
-						Some(f64::min(cur_min?, time?))
-					}).unwrap_or(-1.);
+							let above_total = *elapsed_time - *total_time;
+							
+							if above_total > 0. {
+								Some(above_total)
+							} else {
+								None
+							}
+						}
+					}
+				})
+				.fold(Some(remaining_delta), |cur_min, time| {
+					Some(f64::min(cur_min?, time?))
+				}).unwrap_or(-1.);
 		}
 
 		if remaining_delta > 0. {
 			self.handle_finished();
 		}
 
-		(remaining_delta > 0.).then_some(remaining_delta)
+		if remaining_delta > 0. {
+			Some(remaining_delta)
+		} else {
+			None
+		}
 	}
 
 	fn complete(mut self) {
-		self.t.queue
-		    .drain(..)
+		self.t.queue.drain(..)
 		    .for_each(|fork| {
 			    fork.into_iter()
 			        .for_each(|fork_element| {
@@ -179,10 +182,7 @@ impl TweenerStep for SpireTween<Sequence> {
 			        })
 		    });
 
-		self.t.inserteds
-		    .drain(..)
-		    .for_each(|(_, tween)| tween.complete());
-
+		self.t.inserteds.drain(..).for_each(|(_, tween)| tween.complete());
 		self.handle_finished();
 	}
 }

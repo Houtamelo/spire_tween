@@ -12,7 +12,11 @@ impl DelayedCall {
 	pub(crate) fn invoke(&mut self) {
 		match self {
 			DelayedCall::Callable(callable) => {
-				callable.callv(VariantArray::new());
+				if callable.is_valid() {
+					callable.callv(VariantArray::new());
+				} else {
+					godot_warn!("Cannot invoke callable: {:?}, it is invalid", callable.method_name());
+				}
 			}
 			DelayedCall::Closure(closure) => {
 				closure();

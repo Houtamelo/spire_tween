@@ -15,8 +15,15 @@ impl<T> SpireHandle<Method<T>>
 		self.map(|tween| tween.t.method = method_name)
 	}
 
-	pub fn target(&mut self) -> Result<Gd<Object>, FetchError> {
-		self.map(|tween| tween.t.target.clone())
+	/// Returns target if it still points to a valid instance
+	pub fn target(&mut self) -> Result<Option<Gd<Object>>, FetchError> {
+		self.map(|tween| {
+			if tween.t.target.is_instance_valid() {
+				Some(tween.t.target.clone())
+			} else {
+				None
+			}
+		})
 	}
 
 	pub fn set_target(&mut self, target: Gd<Object>) -> Result<(), FetchError> {
