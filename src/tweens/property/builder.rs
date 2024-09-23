@@ -191,9 +191,9 @@ impl<TVal> SpireTween<Property<TVal>>
 		Property<TVal>: ValidTween,
 		TVal: TweenableValue + SpireLerp,
 {
-	pub fn new(
+	pub fn new<'a>(
 		property: impl Into<NodePath>,
-		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
+		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
 		auto_play: AutoPlay,
@@ -226,9 +226,9 @@ impl<TVal> SpireTween<Property<TVal>>
 		}
 	}
 
-	pub fn new_registered(
+	pub fn new_registered<'a>(
 		property: impl Into<NodePath>,
-		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
+		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
 		auto_play: AutoPlay,
@@ -240,9 +240,9 @@ impl<TVal> SpireTween<Property<TVal>>
 
 // Variant Builder
 impl SpireTween<Property<Variant>> {
-	pub fn new<TVal: SpireLerp>(
+	pub fn new<'a, TVal: SpireLerp>(
 		property: impl Into<NodePath>,
-		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
+		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
 		auto_play: AutoPlay,
@@ -279,9 +279,9 @@ impl SpireTween<Property<Variant>> {
 		}
 	}
 
-	pub fn new_registered<TVal: SpireLerp>(
+	pub fn new_registered<'a, TVal: SpireLerp>(
 		property: impl Into<NodePath>,
-		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
+		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
 		auto_play: AutoPlay,

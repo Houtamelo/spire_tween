@@ -32,16 +32,16 @@ impl<TVal: TweenableValue> SpireTween<Method<TVal>> {
 }
 
 #[allow(private_bounds)]
-impl<TVal> SpireTween<Method<TVal>>
+impl<Val> SpireTween<Method<Val>>
 	where
-		TVal: TweenableValue + SpireLerp,
-		Method<TVal>: ValidTween,
+		Val: TweenableValue + SpireLerp,
+		Method<Val>: ValidTween,
 {
-	pub fn new(
+	pub fn new<'a>(
 		method: impl Into<StringName>,
-		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
-		start: TVal,
-		end: TVal,
+		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
+		start: Val,
+		end: Val,
 		duration: f64,
 		auto_play: AutoPlay,
 	) -> Self {
@@ -60,25 +60,25 @@ impl<TVal> SpireTween<Method<TVal>>
 			loop_mode: LoopMode::Finite(0),
 			t: Method {
 				method: method.into(),
-				target: target.to_godot().upcast(),
+				target: target.to_godot().upcast::<Object>(),
 				duration,
 				ease: Ease::Linear,
 				start,
 				end,
-				lerp_fn: <TVal>::spire_lerp,
+				lerp_fn: <Val>::spire_lerp,
 			},
 			calls_on_finish: Vec::new(),
 		}
 	}
 
-	pub fn new_registered(
+	pub fn new_registered<'a>(
 		method: impl Into<StringName>,
-		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
-		start: TVal,
-		end: TVal,
+		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
+		start: Val,
+		end: Val,
 		duration: f64,
 		auto_play: AutoPlay,
-	) -> SpireHandle<Method<TVal>> {
+	) -> SpireHandle<Method<Val>> {
 		Self::new(method, target, start, end, duration, auto_play)
 			.register()
 	}
@@ -86,11 +86,11 @@ impl<TVal> SpireTween<Method<TVal>>
 
 // Variant Builder
 impl SpireTween<Method<Variant>> {
-	pub fn new<TVal: SpireLerp>(
+	pub fn new<'a, Val: SpireLerp>(
 		method: impl Into<StringName>,
-		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
-		start: TVal,
-		end: TVal,
+		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
+		start: Val,
+		end: Val,
 		duration: f64,
 		auto_play: AutoPlay,
 		lerp_fn: fn(from: &Variant, to: &Variant, f64) -> Variant,
@@ -110,7 +110,7 @@ impl SpireTween<Method<Variant>> {
 			loop_mode: LoopMode::Finite(0),
 			t: Method {
 				method: method.into(),
-				target: target.to_godot().upcast(),
+				target: target.to_godot().upcast::<Object>(),
 				duration,
 				ease: Ease::Linear,
 				start: start.to_variant(),
@@ -121,11 +121,11 @@ impl SpireTween<Method<Variant>> {
 		}
 	}
 
-	pub fn new_registered<TVal: SpireLerp>(
+	pub fn new_registered<'a, Val: SpireLerp>(
 		method: impl Into<StringName>,
-		target: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
-		start: TVal,
-		end: TVal,
+		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
+		start: Val,
+		end: Val,
 		duration: f64,
 		auto_play: AutoPlay,
 		lerp_fn: fn(from: &Variant, to: &Variant, f64) -> Variant,

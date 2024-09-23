@@ -13,7 +13,7 @@ impl DelayedCall {
 		match self {
 			DelayedCall::Callable(callable) => {
 				if callable.is_valid() {
-					callable.callv(VariantArray::new());
+					callable.callv(&VariantArray::new());
 				} else {
 					godot_warn!("Cannot invoke callable: {:?}, it is invalid", callable.method_name());
 				}

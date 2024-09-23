@@ -2,9 +2,9 @@ use crate::internal::*;
 
 #[allow(private_bounds)]
 impl<T: ValidTween> SpireTween<T> {
-	pub fn bound_to(
-		self, 
-		node: &impl ToGodot<Via = Gd<impl Inherits<Node>>>,
+	pub fn bound_to<'a>(
+		self,
+		node: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Node>>>,
 	) -> Self {
 		Self {
 			bound_node: Some(node.to_godot().upcast()),
@@ -13,11 +13,11 @@ impl<T: ValidTween> SpireTween<T> {
 	}
 
 	#[doc(hidden)]
-	pub fn maybe_bound(
-		self, 
-		gd: &impl ToGodot<Via = Gd<impl Inherits<Object>>>,
+	pub fn maybe_bound<'a>(
+		self,
+		gd: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
 	) -> Self {
-		if let Ok(node) = gd.to_variant().try_to::<Gd<Node>>() {
+		if let Ok(node) = gd.to_godot().upcast::<Object>().try_cast::<Node>() {
 			self.bound_to(&node)
 		} else {
 			self
