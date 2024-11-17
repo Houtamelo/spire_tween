@@ -58,7 +58,7 @@ impl<TVal: TweenableValue> TweenerStep for SpireTween<Method<TVal>>
 			}
 		};
 
-		self.t.target.call(self.t.method.clone(), &[target_value.to_variant()]);
+		self.t.target.call(&self.t.method, &[target_value.to_variant()]);
 
 		maybe_excess_time.and_then(|excess_time| {
 			self.cycle_count += 1;
@@ -96,7 +96,7 @@ impl<TVal> SpireTween<Method<TVal>>
 			};
 
 			self.t.target.call(
-				self.t.method.clone(),
+				&self.t.method,
 				&[target_value.to_variant()],
 			);
 		}

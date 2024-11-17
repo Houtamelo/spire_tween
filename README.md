@@ -1,8 +1,6 @@
 # SpireTween - An alternative tweening library for Godot 4.2+
 
 # Warning!
-- This package is not thoroughly tested, it may contain game-breaking bugs. That being said, I use it everyday on all my projects, and I am 
-  committed to fixing any reported bugs as fast as I can, at least until 2026.
 - This package is largely undocumented, this readme is all that there is, and it will likely remain so since the author is the only known user.
   PRs adding documentation will be accepted though.
 - This package requires Rust nightly, and it uses the following unstable features:

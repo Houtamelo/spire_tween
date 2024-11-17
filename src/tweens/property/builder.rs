@@ -192,7 +192,7 @@ impl<TVal> SpireTween<Property<TVal>>
 		TVal: TweenableValue + SpireLerp,
 {
 	pub fn new<'a>(
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
@@ -213,7 +213,7 @@ impl<TVal> SpireTween<Property<TVal>>
 			loop_mode: LoopMode::Finite(0),
 			calls_on_finish: Vec::new(),
 			t: Property {
-				property: property.into(),
+				property: property.into_arg().to_godot(),
 				target: target.to_godot().upcast(),
 				lerp_mode: LerpMode::Absolute { duration, start: None },
 				ease: Ease::Linear,
@@ -227,7 +227,7 @@ impl<TVal> SpireTween<Property<TVal>>
 	}
 
 	pub fn new_registered<'a>(
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
@@ -241,7 +241,7 @@ impl<TVal> SpireTween<Property<TVal>>
 // Variant Builder
 impl SpireTween<Property<Variant>> {
 	pub fn new<'a, TVal: SpireLerp>(
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,
@@ -266,7 +266,7 @@ impl SpireTween<Property<Variant>> {
 			loop_mode: LoopMode::Finite(0),
 			calls_on_finish: Vec::new(),
 			t: Property {
-				property: property.into(),
+				property: property.into_arg().to_godot(),
 				target: target.to_godot().upcast(),
 				lerp_mode: LerpMode::Absolute { duration, start: None },
 				ease: Ease::Linear,
@@ -280,7 +280,7 @@ impl SpireTween<Property<Variant>> {
 	}
 
 	pub fn new_registered<'a, TVal: SpireLerp>(
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		target: &'a impl ToGodot<ToVia<'a> = Gd<impl Inherits<Object>>>,
 		end: TVal,
 		duration: f64,

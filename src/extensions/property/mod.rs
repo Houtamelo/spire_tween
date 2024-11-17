@@ -7,7 +7,7 @@ pub mod types;
 pub trait DoProperty<TVal, Marker = ()> {
 	fn do_property(
 		&self,
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		end_val: TVal,
 		duration: f64,
 	) -> SpireTween<Property<TVal>>;
@@ -21,12 +21,12 @@ impl<T, TVal> DoProperty<TVal, ()> for Gd<T>
 {
 	fn do_property(
 		&self,
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		end_val: TVal,
 		duration: f64,
 	) -> SpireTween<Property<TVal>> {
 		SpireTween::<Property<TVal>>::new(
-			property.into(),
+			property,
 			self,
 			end_val,
 			duration,
@@ -43,12 +43,12 @@ impl<TVal, T> DoProperty<TVal, BaseMarker> for T
 {
 	fn do_property(
 		&self,
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		end_val: TVal,
 		duration: f64,
 	) -> SpireTween<Property<TVal>> {
 		SpireTween::<Property<TVal>>::new(
-			property.into(),
+			property,
 			&self.to_gd(),
 			end_val,
 			duration,
@@ -60,7 +60,7 @@ impl<TVal, T> DoProperty<TVal, BaseMarker> for T
 pub trait DoVarProperty<TVal: ToGodot, Marker = ()> {
 	fn do_var_property(
 		&self,
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		end_val: TVal,
 		duration: f64,
 	) -> SpireTween<Property<Variant>>;
@@ -73,7 +73,7 @@ impl<T, TVal> DoVarProperty<TVal, ()> for Gd<T>
 {
 	fn do_var_property(
 		&self, 
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		end_val: TVal,
 		duration: f64,
 	) -> SpireTween<Property<Variant>> {
@@ -108,7 +108,7 @@ impl<T, TVal> DoVarProperty<TVal, ()> for Gd<T>
 		};
 		
 		SpireTween::<Property<Variant>>::new::<TVal>(
-			property.into(),
+			property,
 			self,
 			end_val,
 			duration,
@@ -128,7 +128,7 @@ impl<T, TVal> DoVarProperty<TVal, BaseMarker> for T
 {
 	fn do_var_property(
 		&self,
-		property: impl Into<NodePath>,
+		property: impl AsArg<NodePath>,
 		end_val: TVal,
 		duration: f64,
 	) -> SpireTween<Property<Variant>> {
@@ -163,7 +163,7 @@ impl<T, TVal> DoVarProperty<TVal, BaseMarker> for T
 		};
 
 		SpireTween::<Property<Variant>>::new::<TVal>(
-			property.into(),
+			property,
 			&self.to_gd(),
 			end_val,
 			duration,

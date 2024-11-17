@@ -215,7 +215,7 @@ impl<TVal> TweenerStep for SpireTween<Property<TVal>>
 
 		let (target_value, maybe_excess_time) = self.do_step(delta_time)?;
 
-		self.t.target.set_indexed(self.t.property.clone(), &target_value.to_variant());
+		self.t.target.set_indexed(&self.t.property, &target_value.to_variant());
 
 		maybe_excess_time.and_then(|excess_time| {
 			self.cycle_count += 1;
@@ -283,7 +283,7 @@ impl<TVal: TweenableValue> SpireTween<Property<TVal>> {
 			};
 
 		self.t.target.set_indexed(
-			self.t.property.clone(),
+			&self.t.property,
 			&target_value.to_variant(),
 		);
 

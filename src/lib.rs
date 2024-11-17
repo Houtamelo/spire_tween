@@ -2,10 +2,10 @@
 #![feature(trait_alias)]
 #![feature(hash_extract_if)]
 #![feature(let_chains)]
-
 #![allow(non_camel_case_types)]
 #![allow(clippy::too_many_arguments)]
 #![allow(clippy::manual_try_fold)]
+#![doc = include_str!("../README.md")]
 
 mod singleton;
 mod ease;
@@ -49,6 +49,7 @@ pub mod prelude {
 pub(crate) mod internal {
 	pub(crate) use crate::prelude::BaseMarker;
 	pub(crate) use godot::obj::WithBaseField;
+	pub(crate) use godot::meta::AsArg;
 	
 	pub(crate) use std::any::type_name;
 	pub(crate) use std::collections::HashMap;

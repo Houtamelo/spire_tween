@@ -37,7 +37,7 @@ pub(crate) fn eval_property<TVal: FromGodot, TObj: Inherits<Object>>(
 	
 	let obj = gd.upcast_ref();
 	
-	let variant = obj.get_indexed(property.clone());
+	let variant = obj.get_indexed(property);
 
 	variant
 		.try_to::<TVal>()

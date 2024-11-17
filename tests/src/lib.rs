@@ -344,26 +344,25 @@ impl INode2D for Tester {
 
 		self.sprite = Some(base.get_node_as("sprite"));
 
-		let buttons =
-			base.get_node_as::<Control>("test_buttons");
+		let buttons = base.get_node_as::<Control>("test_buttons");
 
 		buttons.get_node_as::<Button>("std")
-		       .connect_ex("pressed".into(), Callable::from_object_method(&base, "_start_test").bindv(Array::from(&[Test::Absolute.to_variant()])))
+		       .connect_ex("pressed", &Callable::from_object_method(&base, "_start_test").bindv(&Array::from(&[Test::Absolute.to_variant()])))
 		       .flags(godot::classes::object::ConnectFlags::DEFERRED.ord() as u32)
 		       .done();
 
 		buttons.get_node_as::<Button>("speed_based")
-		       .connect_ex("pressed".into(), Callable::from_object_method(&base, "_start_test").bindv(Array::from(&[Test::SpeedBased.to_variant()])))
+		       .connect_ex("pressed", &Callable::from_object_method(&base, "_start_test").bindv(&Array::from(&[Test::SpeedBased.to_variant()])))
 		       .flags(godot::classes::object::ConnectFlags::DEFERRED.ord() as u32)
 		       .done();
 
 		buttons.get_node_as::<Button>("relative")
-		       .connect_ex("pressed".into(), Callable::from_object_method(&base, "_start_test").bindv(Array::from(&[Test::Relative.to_variant()])))
+		       .connect_ex("pressed", &Callable::from_object_method(&base, "_start_test").bindv(&Array::from(&[Test::Relative.to_variant()])))
 		       .flags(godot::classes::object::ConnectFlags::DEFERRED.ord() as u32)
 		       .done();
 
 		buttons.get_node_as::<Button>("delay")
-		       .connect_ex("pressed".into(), Callable::from_object_method(&base, "_start_test").bindv(Array::from(&[Test::Delay.to_variant()])))
+		       .connect_ex("pressed", &Callable::from_object_method(&base, "_start_test").bindv(&Array::from(&[Test::Delay.to_variant()])))
 		       .flags(godot::classes::object::ConnectFlags::DEFERRED.ord() as u32)
 		       .done();
 	}

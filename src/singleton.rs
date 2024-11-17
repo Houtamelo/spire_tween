@@ -48,7 +48,7 @@ static SINGLETON: LazyLock<UnsafeWrapper> =
 		let inner = scene_tree
 			.get_root()
 			.expect("Root node does not exist")
-			.get_node_or_null("tweens_controller".into())
+			.get_node_or_null("tweens_controller")
 			.expect("Root node does not have child named `tweens_controller`")
 			.try_cast()
 			.expect("Child of Root `tweens_controller` does not inherit `TweensController`");
