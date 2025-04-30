@@ -1,6 +1,4 @@
-#![feature(inline_const_pat)]
 #![feature(trait_alias)]
-#![feature(hash_extract_if)]
 #![feature(let_chains)]
 #![allow(non_camel_case_types)]
 #![allow(clippy::too_many_arguments)]

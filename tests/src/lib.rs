@@ -1,4 +1,3 @@
-#![feature(inline_const_pat)]
 #![allow(clippy::absurd_extreme_comparisons)]
 
 use std::fmt::{Display, Formatter};
@@ -200,7 +199,7 @@ impl Test {
 						}
 						_ => 500.
 					};
-
+                
 				let expected_y =
 					match time {
 						..=2.0 => {
@@ -210,7 +209,7 @@ impl Test {
 							f64::spire_lerp(&0., &-1000., time / D_1)
 								+ f64::spire_lerp(&0., &1500., (time - 2.0) / D_1)
 						}
-						..=const { D_1 + 2.0 } => {
+						..=6.0 => {
 							-1000. + f64::spire_lerp(&0., &1500., (time - 2.0) / D_1)
 						}
 						_ => 500.
@@ -232,11 +231,11 @@ impl Test {
 				let expected_x =
 					match time {
 						..=3. => 0.,
-						..=const { D_1 + 3. } => {
+						..=7.0 => {
 							f64::spire_lerp(&0., &1000., (time - 3.) / D_1)
 						}
-						..=const { D_1 + 8. } => 1000.,
-						..=const { D_2 + 8. } => {
+						..=12. => 1000.,
+						..=16. => {
 							f64::spire_lerp(&1000., &-500., (time - D_1 - 8.) / D_1)
 						}
 						_ => -500.
@@ -245,13 +244,13 @@ impl Test {
 				let expected_y =
 					match time {
 						..=3. => 0.,
-						..=const { D_1 + 3. } => {
+						..=7. => {
 							f64::spire_lerp(&0., &-1000., (time - 3.) / D_1)
 						}
-						..=const { D_15 + 3. } => {
+						..=9. => {
 							-1000.
 						}
-						..=const { D_2 + 3. } => {
+						..=11. => {
 							f64::spire_lerp(&-1000., &0., (time - D_15 - 3.) / (D_2 - D_15))
 						}
 						_ => 0.
@@ -260,7 +259,7 @@ impl Test {
 				let expected_color_r =
 					match time {
 						..=0.5 => 0.,
-						..=const { D_2 + 0.5 } => {
+						..=8.5 => {
 							f64::spire_lerp(&0., &0.5, (time - 0.5) / D_2)
 						}
 						_ => 0.5
