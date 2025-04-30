@@ -8,4 +8,4 @@ crate-type = ["lib", "cdylib"]
 
 [dependencies]
 spire_tween = { path = "../" }
-godot = "0.2"
+godot = "0.2.4"

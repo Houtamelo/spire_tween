@@ -1,8 +1,9 @@
 [package]
 name = "spire_tween"
-version = "0.4.1"
+version = "0.4.2"
 authors = ["Houtamelo"]
-edition = "2021"
+edition = "2024"
+resolver = "3"
 description = "A Slimy tweener library for Godot(4.2+), inspired on the design of DoTween(3rd party package for Unity)"
 license = "MIT"
 repository = "https://github.com/Houtamelo/spire_tween"
@@ -13,7 +14,10 @@ keywords = ["godot", "tweening", "animation", "gdextension", "spire"]
 crate-type = ["lib", "cdylib"]
 
 [dependencies]
-godot = { version = "0.2", features = ["experimental-threads"] }
+godot = { version = "0.2.4", features = ["experimental-threads"] }
 keyframe = "1.1.1"
 uuid = { version = "1.10", features = ["v4"] }
 anyhow = "1.0"
+
+[patch.crates-io]
+godot = { git = "https://github.com/godot-rust/gdext.git" }

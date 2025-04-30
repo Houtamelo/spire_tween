@@ -45,6 +45,7 @@ pub mod prelude {
 
 #[allow(unused_imports)]
 pub(crate) mod internal {
+    pub(crate) use godot::classes::*;
 	pub(crate) use crate::prelude::BaseMarker;
 	pub(crate) use godot::obj::WithBaseField;
 	pub(crate) use godot::meta::AsArg;
