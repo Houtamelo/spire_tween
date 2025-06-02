@@ -80,7 +80,7 @@ mod must_compile {
 			self.do_delayed_call(|| (), 0.0)
 				.register();
 			
-			self.do_delayed_callable(Callable::from_fn("", |_| Ok(Variant::nil())), 1.0)
+			self.do_delayed_callable(Callable::from_local_fn("", |_| Ok(Variant::nil())), 1.0)
 				.register();
 		}
 	}
@@ -91,7 +91,7 @@ mod must_compile {
 			this.do_delayed_call(|| (), 2.0)
 				.register();
 
-			this.do_delayed_callable(Callable::from_fn("", |_| Ok(Variant::nil())), 1.0)
+			this.do_delayed_callable(Callable::from_local_fn("", |_| Ok(Variant::nil())), 1.0)
 			    .register();
 		}
 	}
@@ -100,7 +100,7 @@ mod must_compile {
 		node.do_delayed_call(|| godot_print!(""), 1.0)
 			.register();
 
-		node.do_delayed_callable(Callable::from_fn("", |_| Ok(Variant::nil())), 1.0)
+		node.do_delayed_callable(Callable::from_local_fn("", |_| Ok(Variant::nil())), 1.0)
 		    .register();
 	}
 
@@ -108,7 +108,7 @@ mod must_compile {
 		node.do_delayed_call(|| godot_print!(""), 1.0)
 		    .register();
 
-		node.do_delayed_callable(Callable::from_fn("", |_| Ok(Variant::nil())), 1.0)
+		node.do_delayed_callable(Callable::from_local_fn("", |_| Ok(Variant::nil())), 1.0)
 		    .register();
 	}
 
@@ -116,7 +116,7 @@ mod must_compile {
 		node.do_delayed_call(|| godot_print!(""), 1.0)
 		    .register();
 
-		node.do_delayed_callable(Callable::from_fn("", |_| Ok(Variant::nil())), 1.0)
+		node.do_delayed_callable(Callable::from_local_fn("", |_| Ok(Variant::nil())), 1.0)
 		    .register();
 	}
 }
