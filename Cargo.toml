@@ -18,6 +18,3 @@ godot = { version = "0.3.0", features = ["experimental-threads"] }
 keyframe = "1.1.1"
 uuid = { version = "1.10", features = ["v4"] }
 anyhow = "1.0"
-
-[patch.crates-io]
-godot = { git = "https://github.com/godot-rust/gdext.git" }
